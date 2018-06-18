@@ -104,9 +104,15 @@ class ContactData extends Component {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
         }
         const order = {
-            ingredients: this.props.ings,
-            price: this.props.price,
-            orderData: formData
+            
+                user_id : 1 ,  //sending static id for now.
+                price: this.props.price,
+                orderData:{
+                    ingredients: this.props.ings,
+                },
+                user_data : formData 
+           
+            
         }
         axios.post( '/orders.json', order )
             .then( response => {

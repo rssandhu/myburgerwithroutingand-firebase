@@ -11,11 +11,11 @@ class App extends Component {
     return (
       <div>
         <Layout>
-          <Switch>
+          <Switch> 
+            {/* calling main routes from here */}
             <Route path="/checkout" component={Checkout} />
             <Route path="/orders" component={Orders} />
             <Route path="/" exact component={BurgerBuilder} />
-            {/* <Route path="/Signup"  component={Auth} /> */}
           </Switch>
         </Layout>
       </div>
