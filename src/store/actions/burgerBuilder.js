@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
+// import axios from '../../axios-orders';
 
 
 export const addIngredient = ( name ) => {
@@ -36,5 +36,5 @@ export const initIngredients = () => {
         meat: 0,
         bacon: 0
     }
-    return dispatch => {ingdata};
+    return dispatch => ingdata;
 };

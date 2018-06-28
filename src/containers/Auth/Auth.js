@@ -1,7 +1,11 @@
 import React , { Component } from 'react';
+import  { connect } from 'react-redux'; 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import classes from '../Auth/Auth.css';
+import { Spiner }  from '../../components/UI/Spinner/Spinner';
+import * as actions from '../../store/actions/index';
+
 
 
 class Auth extends Component{
@@ -36,7 +40,8 @@ class Auth extends Component{
                 valid: false,
                 touched: false
             }
-        }
+        },
+        isSignup : true
        
     }
     checkValidity(value, rules) {
@@ -71,7 +76,7 @@ class Auth extends Component{
     }
     inputChangedHandler = (event, controlsName) => {
        const updatedControlrs = {
-            ... this.state.controls,
+            ...this.state.controls,
             [controlsName] :{
                 ...this.state.controls[controlsName],
                 value : event.target.value,
@@ -80,6 +85,15 @@ class Auth extends Component{
             }
        }
        this.setState({controls : updatedControlrs});
+    }
+    submitHandler = (event) => {
+        event.preventDefault();
+        this.props.onAuth(this.state.controls.email.value,this.state.controls.password.value , this.state.isSignup);
+    }
+    switchAuthmodeHandler = () => {
+        this.setState(prevState => {
+            return {isSignup : !prevState.isSignup}
+        })
     }
 
     render(){
@@ -91,7 +105,7 @@ class Auth extends Component{
             });
         }
         
-        const form = formElementsArray.map(formElement => (   //looping form elements
+        let form = formElementsArray.map(formElement => (   //looping form elements
             <Input   //adding propertys to input 
                 key={formElement.id}
                 elementType={formElement.config.elementType}
@@ -103,17 +117,36 @@ class Auth extends Component{
                 changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 
         ));
+        if(this.props.loading){
+            form = <Spiner />
+        }
         return ( 
                 <div className ={classes.Auth}>
-                <h3>Login To Proceed</h3>
-                    <form>  
+                <h3>{this.state.isSignup ? "Signup" : "Signin"} To Proceed</h3>
+                    <form onSubmit = {this.submitHandler}>  
                         {/* rendring dynamic form */}
                         {form}   
                         <Button btnType ="Success">Submit</Button>
                     </form>
+                    <Button
+                    clicked = {this.switchAuthmodeHandler}
+                    btnType = "Danger">Switch To {this.state.isSignup ? "Signin" : "Signup"}</Button>
                 </div>
         );
     }
+
+  
+}
+const mapStatetoProps =state => {
+    return {
+        loading : state.auth.loading
+    }
+   
 }
 
-export default Auth ;
+const  mapDispatchtoProps = dispatch => {
+    return {
+        onAuth : (email,password , isSignup) => dispatch(actions.auth(email, password ,isSignup))
+    } 
+};
+export default connect (mapStatetoProps,mapDispatchtoProps)(Auth) ;
