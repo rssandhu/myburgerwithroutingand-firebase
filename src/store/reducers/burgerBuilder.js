@@ -2,10 +2,10 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../utility';
 
 const initialState = {
-    ingredients:{
+    ingredients: {
         salad: 0,
-        cheese: 0,
-        meat: 0,
+        cheese:0,
+        meat:  0,
         bacon: 0
     },
     totalPrice: 4,
